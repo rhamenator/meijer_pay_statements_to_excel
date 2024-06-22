@@ -1,2 +1,0 @@
-('D:\\source\\repos\\pay_statements_to_excel\\build\\pay_statements_to_excel_win.exe\\PYZ-00.pyz',
- [])
