@@ -24,27 +24,6 @@ from openpyxl.utils.cell import get_column_letter
 from openpyxl.utils.dataframe import dataframe_to_rows
 from tqdm import tqdm 
 
-# # Function to install required packages
-# def install_package(package):
-#     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-# # Ensure required packages are installed
-# required_packages = ['tqdm', 'dicttoxml', 'tkinter', 'tkinterdnd2', 'pandas', 'xlsxwriter', 'fitz', 'subprocess', 'numpy', 'openpyxl', 'keyboard', 'time']
-# for package in required_packages:
-#     try:
-#         __import__(package)
-#     except ImportError:
-#         if package == 'fitz':
-#             install_package('PyMuPDF')
-#             install_package(package)
-#         else:
-#             install_package(package)
-
-# if platform.system() == 'Windows':
-#     import msvcrt
-# else:
-#     import fcntl
-
 # Set up logging
 # logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -91,7 +70,7 @@ def pick_input_file_gui():
     if command_line_mode():
         root = tk.Tk()
         root.withdraw()
-    file_path = filedialog.askopenfilename(defaultextension=".pdf", title="Select the PDF file containing your pay statements")
+    file_path = filedialog.askopenfilename(defaultextension=".pdf", title="Select the PDF file containing your pay statements", filetypes=[("PDF Files", "*.pdf")])
     if command_line_mode():
         root.destroy()
     return file_path
@@ -104,7 +83,7 @@ def pick_output_file_gui(input_file):
     if command_line_mode():
         root = tk.Tk()
         root.withdraw()
-    file_path = filedialog.asksaveasfilename(confirmoverwrite=True, initialfile=os.path.basename(input_file).replace('.pdf', '.xlsx'), defaultextension=".xlsx", title="Select the name of the Excel you want to create")
+    file_path = filedialog.asksaveasfilename(confirmoverwrite=True, initialfile=os.path.basename(input_file).replace('.pdf', '.xlsx'), defaultextension=".xlsx", filetypes=[("Excel Files", "*.xlsx")], title="Select the name of the Excel you want to create")
     if command_line_mode():
         root.destroy()
     return file_path
@@ -266,12 +245,6 @@ def analyze_page_text(page_text, page_num): #, total_pages):
     lines = []
     section_names = ["Earnings", "Employee Taxes", "Pre Tax Deductions", "Post Tax Deductions", "Subject or Taxable Wages", "Employer Paid Benefits", "Absence Plans", "Marital Status", "Payment Information"]
 
-    # if gui_mode:
-    #     update_progress_bar(page_num + 1, total_pages)
-    #     print_message(f"Processing page {page_num} of {len(total_pages)}")  
-    # else:
-    #     print(f"Processing page {page_num} of {len(total_pages)}", end='\r')        
-    
     for block in page_text:
         lines.append(block[4])
 
@@ -963,12 +936,6 @@ def extract_structured_data(file_path, text_widget = None):
         page_num += 1
         page_text = page.get_text("blocks")
         output_data.append(analyze_page_text(page_text, page_num))
-        
-    # for page_num in range(len(document)):
-    #     page = document[page_num]
-    #     page_text = page.get_text("blocks")
-    #     output_data.append(analyze_page_text(page_text, page_num, total_pages))
-    # print_message(f'{page_num + 1} pages processed.', user_input=False)
     return output_data
  
 def main_logic(input_file, output_file, text_box = None):
