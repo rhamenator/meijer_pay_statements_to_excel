@@ -34,22 +34,18 @@ jobs:
       env:
         PYINSTALLER_VERBOSITY: 1
 
-    - name: Decrypt the Certificate
-      if: matrix.os == 'windows-latest'
-      run: |
-        openssl enc -d -aes-256-cbc -pbkdf2 -in certificates\\meijer_pay_statements_to_excel.pfx.enc -out meijer_pay_statements_to_excel.pfx -pass pass:${{ secrets.CERT_PASSWORD }}
-      shell: bash
-
     - name: Import the Certificate (if stored as base64 in GitHub Secrets)
       if: matrix.os == 'windows-latest'
       run: |
-        mkdir -p certificates | echo "${{ secrets.CERT_PFX }}" | base64 -d > meijer_pay_statements_to_excel.pfx
+        mkdir -p certificates
+        echo "${{ secrets.CERT_PFX }}" | base64 -d > certificates/meijer_pay_statements_to_excel.pfx.enc.b64
+        openssl enc -d -aes-256-cbc -pbkdf2 -in certificates/meijer_pay_statements_to_excel.pfx.enc.b64 -out certificates/meijer_pay_statements_to_excel.pfx -pass pass:${{ secrets.CERT_PASSWORD }}
       shell: bash
 
     - name: Sign the Executable
       if: matrix.os == 'windows-latest'
       run: |
-        signtool sign /f meijer_pay_statements_to_excel.pfx /p ${{ secrets.CERT_PASSWORD }} /t http://timestamp.digicert.com /v dist/meijer_pay_statements_to_excel.exe
+        signtool sign /f certificates/meijer_pay_statements_to_excel.pfx /p ${{ secrets.CERT_PASSWORD }} /t http://timestamp.digicert.com /v dist/meijer_pay_statements_to_excel.exe
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v3
