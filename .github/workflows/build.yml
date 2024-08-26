@@ -37,7 +37,7 @@ jobs:
     - name: Decrypt the Certificate
       if: matrix.os == 'windows-latest'
       run: |
-        openssl enc -d -aes-256-cbc -pbkdf2 -in certificates\meijer_pay_statements_to_excel.pfx.enc -out meijer_pay_statements_to_excel.pfx -pass pass:${{ secrets.CERT_PASSWORD }}
+        openssl enc -d -aes-256-cbc -pbkdf2 -in certificates\\meijer_pay_statements_to_excel.pfx.enc -out meijer_pay_statements_to_excel.pfx -pass pass:${{ secrets.CERT_PASSWORD }}
       shell: bash
 
     - name: Import the Certificate (if stored as base64 in GitHub Secrets)
