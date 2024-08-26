@@ -43,7 +43,7 @@ jobs:
     - name: Import the Certificate (if stored as base64 in GitHub Secrets)
       if: matrix.os == 'windows-latest'
       run: |
-        echo "${{ secrets.CERT_PFX }}" | base64 -d > meijer_pay_statements_to_excel.pfx
+        mkdir -p certificates | echo "${{ secrets.CERT_PFX }}" | base64 -d > meijer_pay_statements_to_excel.pfx
       shell: bash
 
     - name: Sign the Executable
@@ -59,4 +59,6 @@ jobs:
         
     - name: Cleanup
       if: matrix.os == 'windows-latest'
-      run: rm your-certificate.pfx
+      run: |
+        rm your-certificate.pfx | rm certificates
+      shell: bash
