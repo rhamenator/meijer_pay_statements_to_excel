@@ -36,7 +36,8 @@ jobs:
         
     - name: Create certificates directory
       if: matrix.os == 'windows-latest'
-        mkdir -p certificates
+      run: mkdir -p certificates
+      shell: bash
       
     - name: Import the Certificate (if stored as base64 in GitHub Secrets)
       if: matrix.os == 'windows-latest'
@@ -49,6 +50,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         signtool sign /f certificates/meijer_pay_statements_to_excel.pfx /p ${{ secrets.CERT_PASSWORD }} /t http://timestamp.digicert.com /v dist/meijer_pay_statements_to_excel.exe
+      shell: cmd
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v3
@@ -59,5 +61,6 @@ jobs:
     - name: Cleanup
       if: matrix.os == 'windows-latest'
       run: |
-        rm your-certificate.pfx | rm certificates
+        rm certificates/meijer_pay_statements_to_excel.pfx
+        rm -rf certificates
       shell: bash
