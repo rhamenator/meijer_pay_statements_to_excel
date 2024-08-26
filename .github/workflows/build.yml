@@ -33,11 +33,14 @@ jobs:
         pyinstaller --onefile pay_statements_to_excel.py
       env:
         PYINSTALLER_VERBOSITY: 1
-
+        
+    - name: Create certificates directory
+      if: matrix.os == 'windows-latest'
+        mkdir -p certificates
+      
     - name: Import the Certificate (if stored as base64 in GitHub Secrets)
       if: matrix.os == 'windows-latest'
       run: |
-        mkdir -p certificates
         echo "${{ secrets.CERT_PFX }}" | base64 -d > certificates/meijer_pay_statements_to_excel.pfx.enc.b64
         openssl enc -d -aes-256-cbc -pbkdf2 -in certificates/meijer_pay_statements_to_excel.pfx.enc.b64 -out certificates/meijer_pay_statements_to_excel.pfx -pass pass:${{ secrets.CERT_PASSWORD }}
       shell: bash
