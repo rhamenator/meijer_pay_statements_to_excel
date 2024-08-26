@@ -1,0 +1,62 @@
+name: Build Executable
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+
+    - name: Build executable
+      run: |
+        pyinstaller --onefile pay_statements_to_excel.py
+      env:
+        PYINSTALLER_VERBOSITY: 1
+
+    - name: Decrypt the Certificate
+      if: matrix.os == 'windows-latest'
+      run: |
+        openssl enc -d -aes-256-cbc -pbkdf2 -in certificates/your-certificate.pfx.enc -out your-certificate.pfx -pass pass:${{ secrets.CERT_PASSWORD }}
+      shell: bash
+
+    - name: Import the Certificate (if stored as base64 in GitHub Secrets)
+      if: matrix.os == 'windows-latest'
+      run: |
+        echo "${{ secrets.CERT_PFX }}" | base64 -d > your-certificate.pfx
+      shell: bash
+
+    - name: Sign the Executable
+      if: matrix.os == 'windows-latest'
+      run: |
+        signtool sign /f your-certificate.pfx /p ${{ secrets.CCERT_PASSWORD }} /t http://timestamp.digicert.com /v dist/pay_statements_to_excel.exe
+
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: executable-${{ matrix.os }}
+        path: dist/
+        
+    - name: Cleanup
+      if: matrix.os == 'windows-latest'
+      run: rm your-certificate.pfx
