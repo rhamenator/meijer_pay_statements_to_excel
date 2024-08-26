@@ -1,6 +1,4 @@
-# meijer_pay_statements_to_excel
-
-##Meijer Pay Statements to Excel Converter
+# Meijer Pay Statements to Excel Converter
 
 This Python program is designed to streamline the process of converting Meijer pay statements from various formats into a structured Excel spreadsheet. It automates the extraction, processing, and organization of payroll data, making it easier for users to analyze and manage their financial records.
 
