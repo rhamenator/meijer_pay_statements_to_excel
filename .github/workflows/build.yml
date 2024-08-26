@@ -30,26 +30,26 @@ jobs:
 
     - name: Build executable
       run: |
-        pyinstaller --onefile pay_statements_to_excel.py
+        pyinstaller --onefile meijer_pay_statements_to_excel.py
       env:
         PYINSTALLER_VERBOSITY: 1
 
     - name: Decrypt the Certificate
       if: matrix.os == 'windows-latest'
       run: |
-        openssl enc -d -aes-256-cbc -pbkdf2 -in certificates/your-certificate.pfx.enc -out your-certificate.pfx -pass pass:${{ secrets.CERT_PASSWORD }}
+        openssl enc -d -aes-256-cbc -pbkdf2 -in certificates/meijer_pay_statements_to_excel.pfx.enc -out meijer_pay_statements_to_excel.pfx -pass pass:${{ secrets.CERT_PASSWORD }}
       shell: bash
 
     - name: Import the Certificate (if stored as base64 in GitHub Secrets)
       if: matrix.os == 'windows-latest'
       run: |
-        echo "${{ secrets.CERT_PFX }}" | base64 -d > your-certificate.pfx
+        echo "${{ secrets.CERT_PFX }}" | base64 -d > meijer_pay_statements_to_excel.pfx
       shell: bash
 
     - name: Sign the Executable
       if: matrix.os == 'windows-latest'
       run: |
-        signtool sign /f your-certificate.pfx /p ${{ secrets.CCERT_PASSWORD }} /t http://timestamp.digicert.com /v dist/pay_statements_to_excel.exe
+        signtool sign /f meijer_pay_statements_to_excel.pfx /p ${{ secrets.CERT_PASSWORD }} /t http://timestamp.digicert.com /v dist/meijer_pay_statements_to_excel.exe
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v3
