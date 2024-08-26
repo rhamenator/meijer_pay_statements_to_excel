@@ -30,7 +30,7 @@ jobs:
 
     - name: Build executable
       run: |
-        pyinstaller --onefile meijer_pay_statements_to_excel.py
+        pyinstaller --onefile pay_statements_to_excel.py
       env:
         PYINSTALLER_VERBOSITY: 1
 
