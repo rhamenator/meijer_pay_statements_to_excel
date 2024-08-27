@@ -1,2 +1,3 @@
 pycache/ *.pyc *.pyo *.pyd *.json
-docs/ *.*
+build/ *.*
+certificates/ *.pfx *.pfx.enc *.pfx.enc.b64 *.sh *.bat
