@@ -58,8 +58,8 @@ jobs:
         name: executable-${{ matrix.os }}
         path: dist/
 
-    - name: Cleanup
-      if: matrix.os == 'windows-latest'
-      shell: bash
-      run: |
-        rm -rf certificates
+    # - name: Cleanup
+      # if: matrix.os == 'windows-latest'
+      # shell: bash
+      # run: |
+      #   rm -rf certificates
