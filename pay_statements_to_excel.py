@@ -1,3 +1,5 @@
+#! python3
+
 #pay_statements_to_excel.py
 import subprocess
 import re

@@ -1,46 +1,62 @@
 # Meijer Pay Statements to Excel Converter
 
-This Python program is designed to streamline the process of converting Meijer pay statements from various formats into a structured Excel spreadsheet. It automates the extraction, processing, and organization of payroll data, making it easier for users to analyze and manage their financial records.
+This Python script automates the extraction of data from Meijer hourly worker pay statements (in PDF format) and organizes it into a structured Excel workbook, along with JSON, XML, and CSV files.
 
-## Key Features
+## Important Note
 
-- **Automated Data Extraction**: The program efficiently extracts relevant data from pay statements using advanced pattern recognition and regular expressions.
-  
-- **Flexible Input Formats**: It supports a variety of input formats, thanks to libraries like `fitz` for PDF processing and `json` for handling structured data.
+**This script is specifically designed to work with Meijer hourly worker pay statements.** It may not function correctly with pay statements from other employers or even other types of Meijer pay statements (e.g., salaried employees).
 
-- **Excel Integration**: Using `pandas` and `openpyxl`, the program converts the extracted data into well-organized Excel spreadsheets, facilitating easy data analysis and reporting.
+## Features
 
-- **Customizable and Extensible**: The modular design allows for easy customization and extension to support additional features or new input formats.
-
-- **User Interaction**: The program includes a simple GUI using `tkinter` for ease of use, and supports command-line operation for advanced users.
-
-- **Robust Error Handling**: Comprehensive error handling ensures smooth operation and provides informative feedback to users, making it resilient to various input anomalies.
+**Data Extraction:** Accurately extracts key information from Meijer pay statements, including:
+    - Employee Identification
+    - Pay Period Details
+    - Earnings Breakdown
+    - Taxes and Deductions
+    - Employer Benefits
+    - Payment Information
+**Multiple Output Formats:** Generates:
+    - Excel Workbook (xlsx) with well-formatted tables and styling
+    - JSON file (json) for easy data exchange
+    - XML file (xml) for structured data representation
+    - CSV file (csv) for basic spreadsheet compatibility
+**User-Friendly Interface:** Provides a simple graphical user interface (GUI) for selecting input and output files.
+**Command-Line Support:** Can also be run from the command line for automation or scripting.
 
 ## Requirements
 
-The program relies on several Python libraries, including:
+- Python 3.x
+- The following Python libraries (install using `pip install -r requirements.txt`):
 
-- `pandas` and `numpy` for data manipulation
-- `openpyxl` for Excel file handling
-- `fitz` (PyMuPDF) for PDF processing
-- `dicttoxml` for converting dictionaries to XML
-- `keyboard`, `tkinter`, and `tqdm` for user interface and experience
-- Standard libraries such as `subprocess`, `os`, and `sys` for system-level operations
-
-Please refer to the `requirements.txt` file for the complete list of dependencies.
+    ``` Text
+    pandas
+    numpy
+    dicttoxml
+    PyMuPDF
+    keyboard
+    tkinterdnd2
+    openpyxl
+    tqdm
+    ```
 
 ## Usage
 
-To use this program, clone the repository and install the required dependencies:
+1. Open your terminal or command prompt.
+2. Navigate to the directory containing the script.
+3. Next, type (you only have to do this the first time you run the program)
 
-```bash
-pip install -r requirements.txt
-```
+    ``` Terminal
+    pip install -r requirements.txt
+    ```
 
-Then, run the script:
+4. Run the script using:
 
-```bash
-python pay_statements_to_excel.py
-```
+    ``` Terminal
+    python pay_statements_to_excel.py <input_pdf_path> <output_excel_path>
+    ```
 
-The program will guide you through the process of selecting input files and generating the output Excel file.
+5. If you want to be prompted to enter the name of the input PDF file and the name of the output Excel file, just leave the parameters blank:
+
+    ``` Terminal
+    python pay_statements_to_excel.py
+    ```
