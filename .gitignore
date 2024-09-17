@@ -1,3 +1,5 @@
+.gitattributes/ *.*
+.gitignore/ *.*
 .vs/ *.*
 .vscode/ *.*
 pycache/ *.pyc *.pyo *.pyd *.json
