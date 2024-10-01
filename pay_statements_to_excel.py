@@ -997,7 +997,7 @@ def main(*args):
             print(f"An error occurred: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)  # Print the traceback
             if root:
-                error_logger.showerror(f"An error occurred:\n{e}")
+                ErrorLogger.showerror(f"An error occurred:\n{e}")
                 root.destroy()
             raise
     elif gui_mode:
@@ -1019,7 +1019,7 @@ def main(*args):
             print(f"An error occurred: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
             if root:
-                error_logger.showerror(f"An error occurred:\n{e}")
+                ErrorLogger.showerror(f"An error occurred:\n{e}")
                 root.destroy()
             raise
     else:
@@ -1030,7 +1030,7 @@ def main(*args):
             print(f"An error occurred: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
             if root:
-                error_logger.showerror(f"An error occurred:\n{e}")
+                ErrorLogger.showerror(f"An error occurred:\n{e}")
                 root.destroy()
             raise
        
