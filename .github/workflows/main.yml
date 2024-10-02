@@ -1,9 +1,10 @@
-name: main
+name: Build and Release
 
 on:
   push:
     tags:
       - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -43,7 +44,7 @@ jobs:
           pyinstaller --onefile --name pay2xl main.py
         elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
           pyinstaller --onefile --name pay2xl --target-arch ${{ matrix.arch }} main.py
-        else
+        else:
           pyinstaller --onefile --name pay2xl main.py
         fi
 
