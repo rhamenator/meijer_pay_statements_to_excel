@@ -11,16 +11,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, macos-10, windows-latest]
         python-version: [3.12]
         include:
           - os: macos-latest
             arch: x64
           - os: macos-latest
             arch: arm64
+          - os: macos-11
+            arch: x64
 
     outputs:
       os: ${{ matrix.os }}
+      arch: ${{ matrix.arch }}
 
     steps:
     - name: Checkout code
@@ -38,21 +41,28 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
 
-    - name: Build application
+    - name: Build application (Windows)
+      if: runner.os == 'Windows'
       run: |
         cd source
-        if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-          pyinstaller --onefile --name pay2xl main.py
-        elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+        pyinstaller --onefile --name pay2xl main.py
+      shell: cmd
+
+    - name: Build application (macOS/Linux)
+      if: runner.os != 'Windows'
+      run: |
+        cd source
+        if [[ "${{ matrix.os }}" == "macos-latest" || "${{ matrix.os }}" == "macos-11" ]]; then
           pyinstaller --onefile --name pay2xl --target-arch ${{ matrix.arch }} main.py
-        else:
+        else
           pyinstaller --onefile --name pay2xl main.py
         fi
+      shell: bash
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.os }}-build
+        name: ${{ matrix.os }}-build-${{ matrix.arch }}
         path: source/dist/
 
   release:
@@ -62,7 +72,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
-        name: ${{ needs.build.outputs.os }}-build
+        name: ${{ needs.build.outputs.os }}-build-${{ needs.build.outputs.arch }}
         path: ./dist
 
     - name: Create Release
@@ -83,5 +93,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./dist/*
-        asset_name: ${{ needs.build.outputs.os }}-build.zip
+        asset_name: ${{ needs.build.outputs.os }}-build-${{ needs.build.outputs.arch }}.zip
         asset_content_type: application/zip
