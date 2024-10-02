@@ -1,0 +1,20 @@
+import fitz  # PyMuPDF
+from data_processing import analyze_page_text
+
+def process_pdf(input_file):
+    data = {}
+    doc = fitz.open(input_file)
+    for page_num, page in enumerate(doc):
+        page_text = page.get_text("blocks")
+        page_data = analyze_page_text(page_text, page_num)
+        # Merge page_data into data
+        for key, value in page_data.items():
+            if key not in data:
+                data[key] = value
+            else:
+                if isinstance(data[key], dict):
+                    data[key].update(value)
+                else:
+                    data[key] = value
+    doc.close()
+    return data

@@ -1,0 +1,8 @@
+pandas
+numpy
+dicttoxml
+PyMuPDF
+keyboard
+tkinterdnd2
+openpyxl
+tqdm

@@ -1,0 +1,13 @@
+SECTION_NAMES = [
+    "Earnings",
+    "Employee Taxes",
+    "Pre Tax Deductions",
+    "Post Tax Deductions",
+    "Subject or Taxable Wages",
+    "Employer Paid Benefits",
+    "Absence Plans",
+    "Marital Status",
+    "Payment Information"
+]
+
+# Add other constants as needed

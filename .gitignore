@@ -1,5 +1,6 @@
-.gitattributes/ *.*
-.gitignore/ *.*
+.old/ *.*
 .vs/ *.*
 .vscode/ *.*
+.venv/ *.*
 pycache/ *.pyc *.pyo *.pyd *.json
+__pycache__/ *.pyc *.pyo *.pyd *.json
