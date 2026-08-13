@@ -2,6 +2,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 SOURCE = Path(__file__).resolve().parents[1] / "source"
@@ -35,9 +36,10 @@ class DataProcessingTests(unittest.TestCase):
             json_path = root / "output.json"
             csv_path = root / "output.csv"
             xml_path = root / "output.xml"
-            self.assertTrue(save_to_json(data, json_path))
-            self.assertTrue(save_to_csv(data, csv_path))
-            self.assertTrue(save_to_xml(data, xml_path))
+            with patch("source.export_data.print_message"):
+                self.assertTrue(save_to_json(data, json_path))
+                self.assertTrue(save_to_csv(data, csv_path))
+                self.assertTrue(save_to_xml(data, xml_path))
             self.assertEqual(data, json.loads(json_path.read_text(encoding="utf-8")))
             self.assertIn("Identification:Employee", csv_path.read_text(encoding="utf-8"))
             self.assertIn("<root>", xml_path.read_text(encoding="utf-8"))
