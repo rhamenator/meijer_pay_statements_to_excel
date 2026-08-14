@@ -10,6 +10,7 @@ sys.path.insert(0, str(SOURCE))
 
 from data_processing import safe_float_conversion, safe_int_conversion  # noqa: E402
 from export_data import flatten_dict, save_to_csv, save_to_json, save_to_xml  # noqa: E402
+from main_utils import print_message  # noqa: E402
 
 
 class DataProcessingTests(unittest.TestCase):
@@ -29,6 +30,17 @@ class DataProcessingTests(unittest.TestCase):
             flatten_dict({"section": {"value": 2}, "rows": [{"name": "alpha"}]}),
         )
 
+    def test_print_message_uses_stdout_without_a_display(self):
+        with (
+            patch("main_utils.command_line_mode", return_value=True),
+            patch("main_utils.tk.Tk") as tk_root,
+            patch("builtins.print") as stdout,
+        ):
+            self.assertIsNone(print_message("headless status"))
+
+        tk_root.assert_not_called()
+        stdout.assert_called_once_with("headless status")
+
     def test_structured_exports_write_parseable_outputs(self):
         data = [{"Identification": {"Employee": "Example"}, "Earnings": {"Regular": {"Amount": 10.0}}}]
         with tempfile.TemporaryDirectory() as directory:
@@ -36,7 +48,7 @@ class DataProcessingTests(unittest.TestCase):
             json_path = root / "output.json"
             csv_path = root / "output.csv"
             xml_path = root / "output.xml"
-            with patch("source.export_data.print_message"):
+            with patch("export_data.print_message"):
                 self.assertTrue(save_to_json(data, json_path))
                 self.assertTrue(save_to_csv(data, csv_path))
                 self.assertTrue(save_to_xml(data, xml_path))

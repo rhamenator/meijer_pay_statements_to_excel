@@ -42,10 +42,13 @@ def show_temporary_message(message, duration=3000):
     top.after(duration, top.destroy)
 
 def print_message(message, title=None, user_input=False, dialog_type=None, duration=3000):
-    # global gui_mode
+    root = None
     if command_line_mode():
-        root = tk.Tk()
-        root.withdraw()
+        print(message)
+        return None
+
+    root = tk.Tk()
+    root.withdraw()
     response = None
     if user_input:
         if is_gui_mode() or os_supports_gui():
@@ -78,7 +81,7 @@ def print_message(message, title=None, user_input=False, dialog_type=None, durat
         elif root is not None and is_gui_mode():
             show_in_main_window(root, title, message)
         else: print(message)
-    if command_line_mode() and root is not None: root.destroy()
+    if root is not None: root.destroy()
     return response
 
 
