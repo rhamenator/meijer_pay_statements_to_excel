@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/assets/logo.png" alt="Meijer Pay Statements to Excel logo" width="220">
+</p>
+
 # Meijer Pay Statements to Excel Converter
 
 This Python script automates the extraction of data from Meijer hourly worker pay statements (in PDF format) and organizes it into a structured Excel workbook, along with JSON, XML, and CSV files.
